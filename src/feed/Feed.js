@@ -78,6 +78,74 @@ function App() {
     ]
   };
 
+  // Mock data for posts (initially 8 posts)
+  const [postsData, setPostsData] = useState([
+    {
+      id: 'post-1',
+      userName: 'Joya joyzy',
+      time: '20 MINUTES AGO',
+      caption: 'Hello I am getting crazy. #Joyiscrazy',
+      image: '/logo512.png',
+      likes: 999,
+    },
+    {
+      id: 'post-2',
+      userName: 'Joya joyzy',
+      time: '1 HOUR AGO',
+      caption: 'Another great day! #MindLink',
+      image: '/logo512.png',
+      likes: 500,
+    },
+    {
+      id: 'post-3',
+      userName: 'Joya joyzy',
+      time: '2 HOURS AGO',
+      caption: 'Loving this weather. #Happy',
+      image: '/logo512.png',
+      likes: 200,
+    },
+    {
+      id: 'post-4',
+      userName: 'Joya joyzy',
+      time: '3 HOURS AGO',
+      caption: 'New adventures await! #Explore',
+      image: '/logo512.png',
+      likes: 150,
+    },
+    {
+      id: 'post-5',
+      userName: 'Joya joyzy',
+      time: '4 HOURS AGO',
+      caption: 'Coding all night. #DeveloperLife',
+      image: '/logo512.png',
+      likes: 100,
+    },
+    {
+      id: 'post-6',
+      userName: 'Joya joyzy',
+      time: '5 HOURS AGO',
+      caption: 'Time for a break. #CoffeeTime',
+      image: '/logo512.png',
+      likes: 80,
+    },
+    {
+      id: 'post-7',
+      userName: 'Joya joyzy',
+      time: '6 HOURS AGO',
+      caption: 'Learning something new everyday. #Knowledge',
+      image: '/logo512.png',
+      likes: 120,
+    },
+    {
+      id: 'post-8',
+      userName: 'Joya joyzy',
+      time: '7 HOURS AGO',
+      caption: 'Weekend vibes. #Relax',
+      image: '/logo512.png',
+      likes: 70,
+    },
+  ]);
+
   const showLikers = (postId) => {
     setCurrentPostLikers(likersData[postId] || []);
     setShowLikersModal(true);
@@ -137,6 +205,19 @@ function App() {
       // Here you would typically send the post to your backend
       console.log('Creating post:', { content: postContent, image: postImage });
       
+      const newPost = {
+        id: `post-${postsData.length + 1}`,
+        userName: 'Joya joyzy',
+        time: 'JUST NOW',
+        caption: postContent,
+        image: postImage ? URL.createObjectURL(postImage) : null,
+        likes: 0,
+      };
+
+      setPostsData([newPost, ...postsData]);
+      setLikedPosts((prev) => ({ ...prev, [newPost.id]: false }));
+      setSavedPosts((prev) => ({ ...prev, [newPost.id]: false }));
+      setCommentsByPost((prev) => ({ ...prev, [newPost.id]: [] }));
       // Reset form and close modal
       setPostContent('');
       setPostImage(null);
@@ -405,901 +486,132 @@ function App() {
             {/* Feeds */}
             <div className="feeds">
               {/* Feed Template */}
-              <div className="feed">
-                <div className="head">
-                  <div className="user">
-                    <div className="profile-photo">
-                      <img src="/logo192.png" alt="User profile" />
+              {postsData.map((post) => (
+                <div className="feed" key={post.id}>
+                  <div className="head">
+                    <div className="user">
+                      <div className="profile-photo">
+                        <img src="/logo192.png" alt="User profile" />
+                      </div>
+                      <div className="info">
+                        <h3>{post.userName}</h3>
+                        <small>Egypt, {post.time}</small>
+                      </div>
                     </div>
-                    <div className="info">
-                      <h3>Joya joyzy</h3>
-                      <small>Egypt, 20 MINUTES AGO</small>
-                    </div>
+                    <span className="edit">
+                      <i className="uil uil-ellipsis-h"></i>
+                    </span>
                   </div>
-                  <span className="edit">
-                    <i className="uil uil-ellipsis-h"></i>
-                  </span>
-                </div>
 
-                <div className="photo">
-                  <img src="/logo512.png" alt="Post image" />
-                </div>
+                  <div className="photo">
+                    <img src={post.image} alt="Post image" />
+                  </div>
 
-                <div className="action-button">
-                  <div className="interaction-buttons">
-                    <div className="left-buttons">
-                      <span className={`like-btn ${likedPosts['post-1'] ? 'liked' : ''}`} onClick={() => toggleLike('post-1')}>
-                        {likedPosts['post-1'] ? (
-                          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
-                            <path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6 4 4 6.5 4c1.74 0 3.41 1.01 4.22 2.56C11.09 5.01 12.76 4 14.5 4 17 4 19 6 19 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                          </svg>
+                  <div className="action-button">
+                    <div className="interaction-buttons">
+                      <div className="left-buttons">
+                        <span
+                          className={`like-btn ${likedPosts[post.id] ? 'liked' : ''}`}
+                          onClick={() => toggleLike(post.id)}
+                        >
+                          {likedPosts[post.id] ? (
+                            <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
+                              <path
+                                fill="currentColor"
+                                d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6 4 4 6.5 4c1.74 0 3.41 1.01 4.22 2.56C11.09 5.01 12.76 4 14.5 4 17 4 19 6 19 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"
+                              />
+                            </svg>
+                          ) : (
+                            <i className="uil uil-heart"></i>
+                          )}
+                        </span>
+                        <span className="comment-btn" onClick={() => openComments(post.id)}>
+                          <i className="uil uil-comment-dots"></i>
+                        </span>
+                        <span className="share-btn">
+                          <i className="uil uil-share-alt"></i>
+                        </span>
+                      </div>
+                      <span
+                        className={`bookmark-btn ${savedPosts[post.id] ? 'saved' : ''}`}
+                        onClick={() => toggleSaved(post.id)}
+                        title={savedPosts[post.id] ? 'Remove from saved' : 'Save post'}
+                      >
+                        {savedPosts[post.id] ? (
+                          <i className="uil uil-bookmark-full"></i>
                         ) : (
-                          <i className="uil uil-heart"></i>
+                          <i className="uil uil-bookmark"></i>
                         )}
                       </span>
-                      <span className="comment-btn" onClick={() => openComments('post-1')}><i className="uil uil-comment-dots"></i></span>
-                      <span className="share-btn"><i className="uil uil-share-alt"></i></span>
                     </div>
-                    <span 
-                      className={`bookmark-btn ${savedPosts['post-1'] ? 'saved' : ''}`} 
-                      onClick={() => toggleSaved('post-1')}
-                      title={savedPosts['post-1'] ? 'Remove from saved' : 'Save post'}
-                    >
-                      {savedPosts['post-1'] ? (
-                        <i className="uil uil-bookmark-full"></i>
-                      ) : (
-                        <i className="uil uil-bookmark"></i>
-                      )}
-                    </span>
-                  </div>
-                                     <p>
-                     Liked by <b>Joy is crazy</b> and{' '}
-                     <span 
-                       style={{ cursor: 'pointer', color: 'var(--color-aqua-teal)' }}
-                       onClick={() => showLikers('post-1')}
-                     >
-                       <b>999 others</b>
-                     </span>
-                   </p>
-                </div>
-
-                <div className="caption">
-                  <p><b>Joya Hoyzy</b> Hello I am getting crazy. <span className="harsh-tag">#Joyiscrazy</span></p>
-                </div>
-
-                <div className="comments-section">
-                  <div className="comments-toggle" onClick={() => openComments('post-1')}>
-                    <span className="text-muted">
-                      {expandedComments['post-1'] ? 'Hide comments' : 'View all 99 comments'}
-                    </span>
-                  </div>
-                  
-                  {expandedComments['post-1'] && (
-                    <div className="inline-comments">
-                      <div className="comments-list">
-                        {(commentsByPost['post-1'] || []).map((comment, idx) => (
-                          <div key={idx} className="comment-item">
-                            <div className="comment-avatar">
-                              <img src="/logo192.png" alt={comment.author} />
-                            </div>
-                            <div className="comment-content">
-                              <div className="comment-header">
-                                <span className="comment-author">{comment.author}</span>
-                                <span className="comment-time">{comment.time}</span>
-                              </div>
-                              <p className="comment-text">{comment.text}</p>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                      <div className="comment-input-section">
-                        <div className="comment-input">
-                          <input
-                            type="text"
-                            placeholder="Write a comment..."
-                            value={commentInputs['post-1'] || ''}
-                            onChange={(e) => setCommentInputs({ ...commentInputs, ['post-1']: e.target.value })}
-                            onKeyDown={(e) => {
-                              if (e.key === 'Enter') addComment('post-1', commentInputs['post-1'] || '');
-                            }}
-                          />
-                          <button 
-                            className="comment-submit-btn"
-                            onClick={() => addComment('post-1', commentInputs['post-1'] || '')}
-                          >
-                            <i className="uil uil-message"></i>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* POST 2 */}
-              <div className="feed">
-                <div className="head">
-                  <div className="user">
-                    <div className="profile-photo">
-                      <img src="/logo192.png" alt="User profile" />
-                    </div>
-                    <div className="info">
-                      <h3>Joya joyzy</h3>
-                      <small>Egypt, 20 MINUTES AGO</small>
-                    </div>
-                  </div>
-                  <span className="edit">
-                    <i className="uil uil-ellipsis-h"></i>
-                  </span>
-                </div>
-
-                <div className="photo">
-                  <img src="/logo512.png" alt="Post image" />
-                </div>
-
-                <div className="action-button">
-                  <div className="interaction-buttons">
-                    <div className="left-buttons">
-                      <span className={`like-btn ${likedPosts['post-2'] ? 'liked' : ''}`} onClick={() => toggleLike('post-2')}>
-                        {likedPosts['post-2'] ? (
-                          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
-                            <path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6 4 4 6.5 4c1.74 0 3.41 1.01 4.22 2.56C11.09 5.01 12.76 4 14.5 4 17 4 19 6 19 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                          </svg>
-                        ) : (
-                          <i className="uil uil-heart"></i>
-                        )}
+                    <p>
+                      Liked by <b>Joy is crazy</b> and{' '}
+                      <span
+                        style={{ cursor: 'pointer', color: 'var(--color-aqua-teal)' }}
+                        onClick={() => showLikers(post.id)}
+                      >
+                        <b>{post.likes} others</b>
                       </span>
-                      <span className="comment-btn" onClick={() => openComments('post-2')}><i className="uil uil-comment-dots"></i></span>
-                      <span className="share-btn"><i className="uil uil-share-alt"></i></span>
-                    </div>
-                    <span 
-                      className={`bookmark-btn ${savedPosts['post-2'] ? 'saved' : ''}`} 
-                      onClick={() => toggleSaved('post-2')}
-                      title={savedPosts['post-2'] ? 'Remove from saved' : 'Save post'}
-                    >
-                      {savedPosts['post-2'] ? (
-                        <i className="uil uil-bookmark-full"></i>
-                      ) : (
-                        <i className="uil uil-bookmark"></i>
-                      )}
-                    </span>
+                    </p>
                   </div>
-                  <p>
-                    Liked by <b>Joy is crazy</b> and{' '}
-                    <span 
-                      style={{ cursor: 'pointer', color: 'var(--color-aqua-teal)' }}
-                      onClick={() => showLikers('post-2')}
-                    >
-                      <b>999 others</b>
-                    </span>
-                  </p>
-                </div>
 
-                <div className="caption">
-                  <p><b>Joya Hoyzy</b> Hello I am getting crazy. <span className="harsh-tag">#Joyiscrazy</span></p>
-                </div>
-
-                <div className="comments-section">
-                  <div className="comments-toggle" onClick={() => openComments('post-2')}>
-                    <span className="text-muted">
-                      {expandedComments['post-2'] ? 'Hide comments' : 'View all 99 comments'}
-                    </span>
+                  <div className="caption">
+                    <p>
+                      <b>{post.userName}</b> {post.caption}
+                    </p>
                   </div>
-                  
-                  {expandedComments['post-2'] && (
-                    <div className="inline-comments">
-                      <div className="comments-list">
-                        {(commentsByPost['post-2'] || []).map((comment, idx) => (
-                          <div key={idx} className="comment-item">
-                            <div className="comment-avatar">
-                              <img src="/logo192.png" alt={comment.author} />
-                            </div>
-                            <div className="comment-content">
-                              <div className="comment-header">
-                                <span className="comment-author">{comment.author}</span>
-                                <span className="comment-time">{comment.time}</span>
-                              </div>
-                              <p className="comment-text">{comment.text}</p>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                      <div className="comment-input-section">
-                        <div className="comment-input">
-                          <input
-                            type="text"
-                            placeholder="Write a comment..."
-                            value={commentInputs['post-2'] || ''}
-                            onChange={(e) => setCommentInputs({ ...commentInputs, ['post-2']: e.target.value })}
-                            onKeyDown={(e) => {
-                              if (e.key === 'Enter') addComment('post-2', commentInputs['post-2'] || '');
-                            }}
-                          />
-                          <button 
-                            className="comment-submit-btn"
-                            onClick={() => addComment('post-2', commentInputs['post-2'] || '')}
-                          >
-                            <i className="uil uil-message"></i>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
 
-              {/* POST 3*/}
-              <div className="feed">
-                <div className="head">
-                  <div className="user">
-                    <div className="profile-photo">
-                      <img src="/logo192.png" alt="User profile" />
-                    </div>
-                    <div className="info">
-                      <h3>Joya joyzy</h3>
-                      <small>Egypt, 20 MINUTES AGO</small>
-                    </div>
-                  </div>
-                  <span className="edit">
-                    <i className="uil uil-ellipsis-h"></i>
-                  </span>
-                </div>
-
-                <div className="photo">
-                  <img src="/logo512.png" alt="Post image" />
-                </div>
-
-                <div className="action-button">
-                  <div className="interaction-buttons">
-                    <div className="left-buttons">
-                      <span className={`like-btn ${likedPosts['post-3'] ? 'liked' : ''}`} onClick={() => toggleLike('post-3')}>
-                        {likedPosts['post-3'] ? (
-                          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
-                            <path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6 4 4 6.5 4c1.74 0 3.41 1.01 4.22 2.56C11.09 5.01 12.76 4 14.5 4 17 4 19 6 19 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                          </svg>
-                        ) : (
-                          <i className="uil uil-heart"></i>
-                        )}
+                  <div className="comments-section">
+                    <div className="comments-toggle" onClick={() => openComments(post.id)}>
+                      <span className="text-muted">
+                        {expandedComments[post.id] ? 'Hide comments' : `View all ${(commentsByPost[post.id] || []).length} comments`}
                       </span>
-                      <span className="comment-btn" onClick={() => openComments('post-3')}><i className="uil uil-comment-dots"></i></span>
-                      <span className="share-btn"><i className="uil uil-share-alt"></i></span>
                     </div>
-                    <span 
-                      className={`bookmark-btn ${savedPosts['post-3'] ? 'saved' : ''}`} 
-                      onClick={() => toggleSaved('post-3')}
-                      title={savedPosts['post-3'] ? 'Remove from saved' : 'Save post'}
-                    >
-                      {savedPosts['post-3'] ? (
-                        <i className="uil uil-bookmark-full"></i>
-                      ) : (
-                        <i className="uil uil-bookmark"></i>
-                      )}
-                    </span>
-                  </div>
-                  <p>
-                    Liked by <b>Joy is crazy</b> and{' '}
-                    <span 
-                      style={{ cursor: 'pointer', color: 'var(--color-aqua-teal)' }}
-                      onClick={() => showLikers('post-3')}
-                    >
-                      <b>999 others</b>
-                    </span>
-                  </p>
-                </div>
 
-                <div className="caption">
-                  <p><b>Joya Hoyzy</b> Hello I am getting crazy. <span className="harsh-tag">#Joyiscrazy</span></p>
-                </div>
-
-                <div className="comments-section">
-                  <div className="comments-toggle" onClick={() => openComments('post-3')}>
-                    <span className="text-muted">
-                      {expandedComments['post-3'] ? 'Hide comments' : 'View all 99 comments'}
-                    </span>
-                  </div>
-                  
-                  {expandedComments['post-3'] && (
-                    <div className="inline-comments">
-                      <div className="comments-list">
-                        {(commentsByPost['post-3'] || []).map((comment, idx) => (
-                          <div key={idx} className="comment-item">
-                            <div className="comment-avatar">
-                              <img src="/logo192.png" alt={comment.author} />
-                            </div>
-                            <div className="comment-content">
-                              <div className="comment-header">
-                                <span className="comment-author">{comment.author}</span>
-                                <span className="comment-time">{comment.time}</span>
+                    {expandedComments[post.id] && (
+                      <div className="inline-comments">
+                        <div className="comments-list">
+                          {(commentsByPost[post.id] || []).map((comment, idx) => (
+                            <div key={idx} className="comment-item">
+                              <div className="comment-avatar">
+                                <img src="/logo192.png" alt={comment.author} />
                               </div>
-                              <p className="comment-text">{comment.text}</p>
+                              <div className="comment-content">
+                                <div className="comment-header">
+                                  <span className="comment-author">{comment.author}</span>
+                                  <span className="comment-time">{comment.time}</span>
+                                </div>
+                                <p className="comment-text">{comment.text}</p>
+                              </div>
                             </div>
+                          ))}
+                        </div>
+                        <div className="comment-input-section">
+                          <div className="comment-input">
+                            <input
+                              type="text"
+                              placeholder="Write a comment..."
+                              value={commentInputs[post.id] || ''}
+                              onChange={(e) =>
+                                setCommentInputs({ ...commentInputs, [post.id]: e.target.value })
+                              }
+                              onKeyDown={(e) => {
+                                if (e.key === 'Enter') addComment(post.id, commentInputs[post.id] || '');
+                              }}
+                            />
+                            <button
+                              className="comment-submit-btn"
+                              onClick={() => addComment(post.id, commentInputs[post.id] || '')}
+                            >
+                              <i className="uil uil-message"></i>
+                            </button>
                           </div>
-                        ))}
-                      </div>
-                      <div className="comment-input-section">
-                        <div className="comment-input">
-                          <input
-                            type="text"
-                            placeholder="Write a comment..."
-                            value={commentInputs['post-3'] || ''}
-                            onChange={(e) => setCommentInputs({ ...commentInputs, ['post-3']: e.target.value })}
-                            onKeyDown={(e) => {
-                              if (e.key === 'Enter') addComment('post-3', commentInputs['post-3'] || '');
-                            }}
-                          />
-                          <button 
-                            className="comment-submit-btn"
-                            onClick={() => addComment('post-3', commentInputs['post-3'] || '')}
-                          >
-                            <i className="uil uil-message"></i>
-                          </button>
                         </div>
                       </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* POST 4 */}
-              <div className="feed">
-                <div className="head">
-                  <div className="user">
-                    <div className="profile-photo">
-                      <img src="/logo192.png" alt="User profile" />
-                    </div>
-                    <div className="info">
-                      <h3>Joya joyzy</h3>
-                      <small>Egypt, 20 MINUTES AGO</small>
-                    </div>
+                    )}
                   </div>
-                  <span className="edit">
-                    <i className="uil uil-ellipsis-h"></i>
-                  </span>
                 </div>
-
-                <div className="photo">
-                  <img src="/logo512.png" alt="Post image" />
-                </div>
-
-                <div className="action-button">
-                  <div className="interaction-buttons">
-                    <div className="left-buttons">
-                      <span className={`like-btn ${likedPosts['post-4'] ? 'liked' : ''}`} onClick={() => toggleLike('post-4')}>
-                        {likedPosts['post-4'] ? (
-                          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
-                            <path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6 4 4 6.5 4c1.74 0 3.41 1.01 4.22 2.56C11.09 5.01 12.76 4 14.5 4 17 4 19 6 19 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                          </svg>
-                        ) : (
-                          <i className="uil uil-heart"></i>
-                        )}
-                      </span>
-                      <span className="comment-btn" onClick={() => openComments('post-4')}><i className="uil uil-comment-dots"></i></span>
-                      <span className="share-btn"><i className="uil uil-share-alt"></i></span>
-                    </div>
-                    <span 
-                      className={`bookmark-btn ${savedPosts['post-4'] ? 'saved' : ''}`} 
-                      onClick={() => toggleSaved('post-4')}
-                      title={savedPosts['post-4'] ? 'Remove from saved' : 'Save post'}
-                    >
-                      {savedPosts['post-4'] ? (
-                        <i className="uil uil-bookmark-full"></i>
-                      ) : (
-                        <i className="uil uil-bookmark"></i>
-                      )}
-                    </span>
-                  </div>
-                  <p>
-                    Liked by <b>Joy is crazy</b> and{' '}
-                    <span 
-                      style={{ cursor: 'pointer', color: 'var(--color-aqua-teal)' }}
-                      onClick={() => showLikers('post-4')}
-                    >
-                      <b>999 others</b>
-                    </span>
-                  </p>
-                </div>
-
-                <div className="caption">
-                  <p><b>Joya Hoyzy</b> Hello I am getting crazy. <span className="harsh-tag">#Joyiscrazy</span></p>
-                </div>
-
-                <div className="comments-section">
-                  <div className="comments-toggle" onClick={() => openComments('post-4')}>
-                    <span className="text-muted">
-                      {expandedComments['post-4'] ? 'Hide comments' : 'View all 99 comments'}
-                    </span>
-                  </div>
-                  
-                  {expandedComments['post-4'] && (
-                    <div className="inline-comments">
-                      <div className="comments-list">
-                        {(commentsByPost['post-4'] || []).map((comment, idx) => (
-                          <div key={idx} className="comment-item">
-                            <div className="comment-avatar">
-                              <img src="/logo192.png" alt={comment.author} />
-                            </div>
-                            <div className="comment-content">
-                              <div className="comment-header">
-                                <span className="comment-author">{comment.author}</span>
-                                <span className="comment-time">{comment.time}</span>
-                              </div>
-                              <p className="comment-text">{comment.text}</p>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                      <div className="comment-input-section">
-                        <div className="comment-input">
-                          <input
-                            type="text"
-                            placeholder="Write a comment..."
-                            value={commentInputs['post-4'] || ''}
-                            onChange={(e) => setCommentInputs({ ...commentInputs, ['post-4']: e.target.value })}
-                            onKeyDown={(e) => {
-                              if (e.key === 'Enter') addComment('post-4', commentInputs['post-4'] || '');
-                            }}
-                          />
-                          <button 
-                            className="comment-submit-btn"
-                            onClick={() => addComment('post-4', commentInputs['post-4'] || '')}
-                          >
-                            <i className="uil uil-message"></i>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* POST 5 */}
-              <div className="feed">
-                <div className="head">
-                  <div className="user">
-                    <div className="profile-photo">
-                      <img src="/logo192.png" alt="User profile" />
-                    </div>
-                    <div className="info">
-                      <h3>Joya joyzy</h3>
-                      <small>Egypt, 20 MINUTES AGO</small>
-                    </div>
-                  </div>
-                  <span className="edit">
-                    <i className="uil uil-ellipsis-h"></i>
-                  </span>
-                </div>
-
-                <div className="photo">
-                  <img src="/logo512.png" alt="Post image" />
-                </div>
-
-                <div className="action-button">
-                  <div className="interaction-buttons">
-                    <div className="left-buttons">
-                      <span className={`like-btn ${likedPosts['post-5'] ? 'liked' : ''}`} onClick={() => toggleLike('post-5')}>
-                        {likedPosts['post-5'] ? (
-                          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
-                            <path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6 4 4 6.5 4c1.74 0 3.41 1.01 4.22 2.56C11.09 5.01 12.76 4 14.5 4 17 4 19 6 19 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                          </svg>
-                        ) : (
-                          <i className="uil uil-heart"></i>
-                        )}
-                      </span>
-                      <span className="comment-btn" onClick={() => openComments('post-5')}><i className="uil uil-comment-dots"></i></span>
-                      <span className="share-btn"><i className="uil uil-share-alt"></i></span>
-                    </div>
-                    <span 
-                      className={`bookmark-btn ${savedPosts['post-5'] ? 'saved' : ''}`} 
-                      onClick={() => toggleSaved('post-5')}
-                      title={savedPosts['post-5'] ? 'Remove from saved' : 'Save post'}
-                    >
-                      {savedPosts['post-5'] ? (
-                        <i className="uil uil-bookmark-full"></i>
-                      ) : (
-                        <i className="uil uil-bookmark"></i>
-                      )}
-                    </span>
-                  </div>
-                  <p>
-                    Liked by <b>Joy is crazy</b> and{' '}
-                    <span 
-                      style={{ cursor: 'pointer', color: 'var(--color-aqua-teal)' }}
-                      onClick={() => showLikers('post-5')}
-                    >
-                      <b>999 others</b>
-                    </span>
-                  </p>
-                </div>
-
-                <div className="caption">
-                  <p><b>Joya Hoyzy</b> Hello I am getting crazy. <span className="harsh-tag">#Joyiscrazy</span></p>
-                </div>
-
-                <div className="comments-section">
-                  <div className="comments-toggle" onClick={() => openComments('post-5')}>
-                    <span className="text-muted">
-                      {expandedComments['post-5'] ? 'Hide comments' : 'View all 99 comments'}
-                    </span>
-                  </div>
-                  
-                  {expandedComments['post-5'] && (
-                    <div className="inline-comments">
-                      <div className="comments-list">
-                        {(commentsByPost['post-5'] || []).map((comment, idx) => (
-                          <div key={idx} className="comment-item">
-                            <div className="comment-avatar">
-                              <img src="/logo192.png" alt={comment.author} />
-                            </div>
-                            <div className="comment-content">
-                              <div className="comment-header">
-                                <span className="comment-author">{comment.author}</span>
-                                <span className="comment-time">{comment.time}</span>
-                              </div>
-                              <p className="comment-text">{comment.text}</p>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                      <div className="comment-input-section">
-                        <div className="comment-input">
-                          <input
-                            type="text"
-                            placeholder="Write a comment..."
-                            value={commentInputs['post-5'] || ''}
-                            onChange={(e) => setCommentInputs({ ...commentInputs, ['post-5']: e.target.value })}
-                            onKeyDown={(e) => {
-                              if (e.key === 'Enter') addComment('post-5', commentInputs['post-5'] || '');
-                            }}
-                          />
-                          <button 
-                            className="comment-submit-btn"
-                            onClick={() => addComment('post-5', commentInputs['post-5'] || '')}
-                          >
-                            <i className="uil uil-message"></i>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* POST 6 */}
-              <div className="feed">
-                <div className="head">
-                  <div className="user">
-                    <div className="profile-photo">
-                      <img src="/logo192.png" alt="User profile" />
-                    </div>
-                    <div className="info">
-                      <h3>Joya joyzy</h3>
-                      <small>Egypt, 20 MINUTES AGO</small>
-                    </div>
-                  </div>
-                  <span className="edit">
-                    <i className="uil uil-ellipsis-h"></i>
-                  </span>
-                </div>
-
-                <div className="photo">
-                  <img src="/logo512.png" alt="Post image" />
-                </div>
-
-                <div className="action-button">
-                  <div className="interaction-buttons">
-                    <div className="left-buttons">
-                      <span className={`like-btn ${likedPosts['post-6'] ? 'liked' : ''}`} onClick={() => toggleLike('post-6')}>
-                        {likedPosts['post-6'] ? (
-                          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
-                            <path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6 4 4 6.5 4c1.74 0 3.41 1.01 4.22 2.56C11.09 5.01 12.76 4 14.5 4 17 4 19 6 19 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                          </svg>
-                        ) : (
-                          <i className="uil uil-heart"></i>
-                        )}
-                      </span>
-                      <span className="comment-btn" onClick={() => openComments('post-6')}><i className="uil uil-comment-dots"></i></span>
-                      <span className="share-btn"><i className="uil uil-share-alt"></i></span>
-                    </div>
-                    <span 
-                      className={`bookmark-btn ${savedPosts['post-6'] ? 'saved' : ''}`} 
-                      onClick={() => toggleSaved('post-6')}
-                      title={savedPosts['post-6'] ? 'Remove from saved' : 'Save post'}
-                    >
-                      {savedPosts['post-6'] ? (
-                        <i className="uil uil-bookmark-full"></i>
-                      ) : (
-                        <i className="uil uil-bookmark"></i>
-                      )}
-                    </span>
-                  </div>
-                  <p>
-                    Liked by <b>Joy is crazy</b> and{' '}
-                    <span 
-                      style={{ cursor: 'pointer', color: 'var(--color-aqua-teal)' }}
-                      onClick={() => showLikers('post-6')}
-                    >
-                      <b>999 others</b>
-                    </span>
-                  </p>
-                </div>
-
-                <div className="caption">
-                  <p><b>Joya Hoyzy</b> Hello I am getting crazy. <span className="harsh-tag">#Joyiscrazy</span></p>
-                </div>
-
-                <div className="comments-section">
-                  <div className="comments-toggle" onClick={() => openComments('post-6')}>
-                    <span className="text-muted">
-                      {expandedComments['post-6'] ? 'Hide comments' : 'View all 99 comments'}
-                    </span>
-                  </div>
-                  
-                  {expandedComments['post-6'] && (
-                    <div className="inline-comments">
-                      <div className="comments-list">
-                        {(commentsByPost['post-6'] || []).map((comment, idx) => (
-                          <div key={idx} className="comment-item">
-                            <div className="comment-avatar">
-                              <img src="/logo192.png" alt={comment.author} />
-                            </div>
-                            <div className="comment-content">
-                              <div className="comment-header">
-                                <span className="comment-author">{comment.author}</span>
-                                <span className="comment-time">{comment.time}</span>
-                              </div>
-                              <p className="comment-text">{comment.text}</p>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                      <div className="comment-input-section">
-                        <div className="comment-input">
-                          <input
-                            type="text"
-                            placeholder="Write a comment..."
-                            value={commentInputs['post-6'] || ''}
-                            onChange={(e) => setCommentInputs({ ...commentInputs, ['post-6']: e.target.value })}
-                            onKeyDown={(e) => {
-                              if (e.key === 'Enter') addComment('post-6', commentInputs['post-6'] || '');
-                            }}
-                          />
-                          <button 
-                            className="comment-submit-btn"
-                            onClick={() => addComment('post-6', commentInputs['post-6'] || '')}
-                          >
-                            <i className="uil uil-message"></i>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* POST 7 */}
-              <div className="feed">
-                <div className="head">
-                  <div className="user">
-                    <div className="profile-photo">
-                      <img src="/logo192.png" alt="User profile" />
-                    </div>
-                    <div className="info">
-                      <h3>Joya joyzy</h3>
-                      <small>Egypt, 20 MINUTES AGO</small>
-                    </div>
-                  </div>
-                  <span className="edit">
-                    <i className="uil uil-ellipsis-h"></i>
-                  </span>
-                </div>
-
-                <div className="photo">
-                  <img src="/logo512.png" alt="Post image" />
-                </div>
-
-                <div className="action-button">
-                  <div className="interaction-buttons">
-                    <div className="left-buttons">
-                      <span className={`like-btn ${likedPosts['post-7'] ? 'liked' : ''}`} onClick={() => toggleLike('post-7')}>
-                        {likedPosts['post-7'] ? (
-                          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
-                            <path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6 4 4 6.5 4c1.74 0 3.41 1.01 4.22 2.56C11.09 5.01 12.76 4 14.5 4 17 4 19 6 19 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                          </svg>
-                        ) : (
-                          <i className="uil uil-heart"></i>
-                        )}
-                      </span>
-                      <span className="comment-btn" onClick={() => openComments('post-7')}><i className="uil uil-comment-dots"></i></span>
-                      <span className="share-btn"><i className="uil uil-share-alt"></i></span>
-                    </div>
-                    <span 
-                      className={`bookmark-btn ${savedPosts['post-7'] ? 'saved' : ''}`} 
-                      onClick={() => toggleSaved('post-7')}
-                      title={savedPosts['post-7'] ? 'Remove from saved' : 'Save post'}
-                    >
-                      {savedPosts['post-7'] ? (
-                        <i className="uil uil-bookmark-full"></i>
-                      ) : (
-                        <i className="uil uil-bookmark"></i>
-                      )}
-                    </span>
-                  </div>
-                  <p>
-                    Liked by <b>Joy is crazy</b> and{' '}
-                    <span 
-                      style={{ cursor: 'pointer', color: 'var(--color-aqua-teal)' }}
-                      onClick={() => showLikers('post-7')}
-                    >
-                      <b>999 others</b>
-                    </span>
-                  </p>
-                </div>
-
-                <div className="caption">
-                  <p><b>Joya Hoyzy</b> Hello I am getting crazy. <span className="harsh-tag">#Joyiscrazy</span></p>
-                </div>
-
-                <div className="comments-section">
-                  <div className="comments-toggle" onClick={() => openComments('post-7')}>
-                    <span className="text-muted">
-                      {expandedComments['post-7'] ? 'Hide comments' : 'View all 99 comments'}
-                    </span>
-                  </div>
-                  
-                  {expandedComments['post-7'] && (
-                    <div className="inline-comments">
-                      <div className="comments-list">
-                        {(commentsByPost['post-7'] || []).map((comment, idx) => (
-                          <div key={idx} className="comment-item">
-                            <div className="comment-avatar">
-                              <img src="/logo192.png" alt={comment.author} />
-                            </div>
-                            <div className="comment-content">
-                              <div className="comment-header">
-                                <span className="comment-author">{comment.author}</span>
-                                <span className="comment-time">{comment.time}</span>
-                              </div>
-                              <p className="comment-text">{comment.text}</p>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                      <div className="comment-input-section">
-                        <div className="comment-input">
-                          <input
-                            type="text"
-                            placeholder="Write a comment..."
-                            value={commentInputs['post-7'] || ''}
-                            onChange={(e) => setCommentInputs({ ...commentInputs, ['post-7']: e.target.value })}
-                            onKeyDown={(e) => {
-                              if (e.key === 'Enter') addComment('post-7', commentInputs['post-7'] || '');
-                            }}
-                          />
-                          <button 
-                            className="comment-submit-btn"
-                            onClick={() => addComment('post-7', commentInputs['post-7'] || '')}
-                          >
-                            <i className="uil uil-message"></i>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-
-              {/* POST 8 */}
-              <div className="feed">
-                <div className="head">
-                  <div className="user">
-                    <div className="profile-photo">
-                      <img src="/logo192.png" alt="User profile" />
-                    </div>
-                    <div className="info">
-                      <h3>Joya joyzy</h3>
-                      <small>Egypt, 20 MINUTES AGO</small>
-                    </div>
-                  </div>
-                  <span className="edit">
-                    <i className="uil uil-ellipsis-h"></i>
-                  </span>
-                </div>
-
-                <div className="photo">
-                  <img src="/logo512.png" alt="Post image" />
-                </div>
-
-                <div className="action-button">
-                  <div className="interaction-buttons">
-                    <div className="left-buttons">
-                      <span className={`like-btn ${likedPosts['post-8'] ? 'liked' : ''}`} onClick={() => toggleLike('post-8')}>
-                        {likedPosts['post-8'] ? (
-                          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true">
-                            <path fill="currentColor" d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 6 4 4 6.5 4c1.74 0 3.41 1.01 4.22 2.56C11.09 5.01 12.76 4 14.5 4 17 4 19 6 19 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
-                          </svg>
-                        ) : (
-                          <i className="uil uil-heart"></i>
-                        )}
-                      </span>
-                      <span className="comment-btn" onClick={() => openComments('post-8')}><i className="uil uil-comment-dots"></i></span>
-                      <span className="share-btn"><i className="uil uil-share-alt"></i></span>
-                    </div>
-                    <span 
-                      className={`bookmark-btn ${savedPosts['post-8'] ? 'saved' : ''}`} 
-                      onClick={() => toggleSaved('post-8')}
-                      title={savedPosts['post-8'] ? 'Remove from saved' : 'Save post'}
-                    >
-                      {savedPosts['post-8'] ? (
-                        <i className="uil uil-bookmark-full"></i>
-                      ) : (
-                        <i className="uil uil-bookmark"></i>
-                      )}
-                    </span>
-                  </div>
-                  <p>
-                    Liked by <b>Joy is crazy</b> and{' '}
-                    <span 
-                      style={{ cursor: 'pointer', color: 'var(--color-aqua-teal)' }}
-                      onClick={() => showLikers('post-8')}
-                    >
-                      <b>999 others</b>
-                    </span>
-                  </p>
-                </div>
-
-                <div className="caption">
-                  <p><b>Joya Hoyzy</b> Hello I am getting crazy. <span className="harsh-tag">#Joyiscrazy</span></p>
-                </div>
-
-                <div className="comments-section">
-                  <div className="comments-toggle" onClick={() => openComments('post-8')}>
-                    <span className="text-muted">
-                      {expandedComments['post-8'] ? 'Hide comments' : 'View all 99 comments'}
-                    </span>
-                  </div>
-                  
-                  {expandedComments['post-8'] && (
-                    <div className="inline-comments">
-                      <div className="comments-list">
-                        {(commentsByPost['post-8'] || []).map((comment, idx) => (
-                          <div key={idx} className="comment-item">
-                            <div className="comment-avatar">
-                              <img src="/logo192.png" alt={comment.author} />
-                            </div>
-                            <div className="comment-content">
-                              <div className="comment-header">
-                                <span className="comment-author">{comment.author}</span>
-                                <span className="comment-time">{comment.time}</span>
-                              </div>
-                              <p className="comment-text">{comment.text}</p>
-                            </div>
-                          </div>
-                        ))}
-                      </div>
-                      <div className="comment-input-section">
-                        <div className="comment-input">
-                          <input
-                            type="text"
-                            placeholder="Write a comment..."
-                            value={commentInputs['post-8'] || ''}
-                            onChange={(e) => setCommentInputs({ ...commentInputs, ['post-8']: e.target.value })}
-                            onKeyDown={(e) => {
-                              if (e.key === 'Enter') addComment('post-8', commentInputs['post-8'] || '');
-                            }}
-                          />
-                          <button 
-                            className="comment-submit-btn"
-                            onClick={() => addComment('post-8', commentInputs['post-8'] || '')}
-                          >
-                            <i className="uil uil-message"></i>
-                          </button>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </div>
-              </div>
-
+              ))}
               {/* END OF FEED */}
             </div>
             {/* End Middle */}
