@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './feed/styles.css';
-import LoginSign from './feed/Feed';
+import './messages/styles.css';
+import LoginSign from './messages/Messages';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
