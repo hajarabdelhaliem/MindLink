@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './styles.css';
 
 function Messages() {
@@ -9,6 +9,9 @@ function Messages() {
   const [inputValue, setInputValue] = useState('');
   const [showChatMenu, setShowChatMenu] = useState(false);
   const [archivedChats, setArchivedChats] = useState([]);
+  const [showEmojiPicker, setShowEmojiPicker] = useState(false);
+  const emojiPickerRef = useRef(null);
+  const emojiButtonRef = useRef(null);
 
   // Mock data for messages
   const messagesData = {
@@ -105,6 +108,19 @@ function Messages() {
 
   const filteredMessages = getFilteredMessages();
 
+  const handleReturnToFeed = () => {
+    if (typeof window !== 'undefined') {
+      window.location.href = '/feed';
+    }
+  };
+
+  const emojiOptions = ['😀', '😂', '😍', '😭', '😡', '👍', '🎉', '🙏', '🥰', '🤗', '😎', '🤩'];
+
+  const handleEmojiSelect = (emoji) => {
+    setInputValue((prev) => prev + emoji);
+    setShowEmojiPicker(false);
+  };
+
   // Close menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (e) => {
@@ -118,6 +134,25 @@ function Messages() {
       return () => document.removeEventListener('click', handleClickOutside);
     }
   }, [showChatMenu]);
+
+  useEffect(() => {
+    const handleClickOutsideEmoji = (e) => {
+      if (
+        showEmojiPicker &&
+        emojiPickerRef.current &&
+        !emojiPickerRef.current.contains(e.target) &&
+        emojiButtonRef.current &&
+        !emojiButtonRef.current.contains(e.target)
+      ) {
+        setShowEmojiPicker(false);
+      }
+    };
+
+    if (showEmojiPicker) {
+      document.addEventListener('click', handleClickOutsideEmoji);
+      return () => document.removeEventListener('click', handleClickOutsideEmoji);
+    }
+  }, [showEmojiPicker]);
 
   return (
     <div className="messages-section">
@@ -339,9 +374,31 @@ function Messages() {
                     }
                   }}
                 />
-                <button className="chat-emoji-btn">
-                  <i className="uil uil-smile"></i>
-                </button>
+                <div className="chat-emoji-wrapper">
+                  <button
+                    className="chat-emoji-btn"
+                    type="button"
+                    ref={emojiButtonRef}
+                    onClick={() => setShowEmojiPicker((prev) => !prev)}
+                    aria-label="Insert emoji"
+                  >
+                    <i className="uil uil-smile"></i>
+                  </button>
+                  {showEmojiPicker && (
+                    <div className="emoji-picker" ref={emojiPickerRef}>
+                      {emojiOptions.map((emoji) => (
+                        <button
+                          key={emoji}
+                          type="button"
+                          className="emoji-picker-item"
+                          onClick={() => handleEmojiSelect(emoji)}
+                        >
+                          {emoji}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
                 <button className="chat-send-btn" onClick={sendMessage}>
                   <i className="uil uil-message"></i>
                 </button>
@@ -357,6 +414,19 @@ function Messages() {
             </div>
           </div>
         )}
+      </div>
+      <div className="return-feed-bar">
+        <button
+          type="button"
+          className="return-feed-icon"
+          onClick={handleReturnToFeed}
+          aria-label="Return to feed"
+          title="Return to Feed"
+        >
+          <span className="return-feed-icon-inner">
+            <i className="uil uil-home"></i>
+          </span>
+        </button>
       </div>
     </div>
   );
