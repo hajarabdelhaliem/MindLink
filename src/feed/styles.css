@@ -237,6 +237,37 @@ main .container .left .profile {
   position: relative;
 }
 
+/* Icon container: make the icon area a fixed square so we can shape it
+   into a semicircle for the active (Home) menu item. */
+.left .sidebar .menu-item span{
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3.6rem;
+  height: 3.6rem; /* matches .menu-item height (4rem) minus padding */
+  margin-left: 0.4rem;
+  position: relative;
+  transition: all 220ms ease;
+}
+
+/* Active menu item: make a semicircle that slightly protrudes left from the sidebar */
+.left .sidebar .menu-item.active span{
+  background: var(--color-navy-blue);
+  color: var(--color-mint);
+  /* curved on the left, flat on the right */
+  border-radius: 50% 0 0 50%;
+  /* slightly bigger and pulled left to protrude */
+  width: 4.4rem;
+  height: 4.4rem;
+  margin-left: -0.8rem;
+  box-shadow: -6px 4px 12px rgba(0,0,0,0.08);
+}
+
+.left .sidebar .menu-item h3{
+  margin-left: 1.2rem; /* shift text to account for the icon block */
+  transition: margin 220ms ease;
+}
+
 .left .sidebar i .notifications-count {
   background: var(--color-aqua-teal); /* better contrast than light-blue */
   color: white;

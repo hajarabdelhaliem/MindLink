@@ -1,13 +1,20 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import './messages/styles.css';
-import LoginSign from './messages/Messages';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import './feed/styles.css';
+import Feed from './feed/Feed';
+import Messages from './messages/Messages';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    <LoginSign />
+    <Router>
+      <Routes>
+        <Route path="/" element={<Feed />} />
+        <Route path="/messages" element={<Messages />} />
+      </Routes>
+    </Router>
   </React.StrictMode>
 );
 
