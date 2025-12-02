@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-function App() {
+function Feed() {
+  const navigate = useNavigate();
   const [openChats, setOpenChats] = useState([]);
   const [chatMessages, setChatMessages] = useState({});
   const [inputValues, setInputValues] = useState({});
@@ -412,7 +414,7 @@ function App() {
                 {/* End Notifications Popup */}
               </a>
 
-              <a className="menu-item" id="messages-notifications">
+              <a className="menu-item" id="messages-notifications" onClick={() => navigate('/messages')} style={{ cursor: 'pointer' }}>
                 <span>
                   <i className="uil uil-envelope">
                     <small className="notifications-count">6</small>
@@ -1135,4 +1137,4 @@ function App() {
   );
 }
 
-export default App;
+export default Feed;
