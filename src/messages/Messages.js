@@ -158,112 +158,7 @@ function Messages() {
 
   return (
     <div className="messages-section">
-      {/* Left Sidebar - Conversations List */}
-      <div className="messages-sidebar">
-        <div className="messages-header">
-          <h2>Messages</h2>
-          <div style={{ display: 'flex', gap: '0.8rem', alignItems: 'center' }}>
-            <button 
-              className="home-icon-btn" 
-              onClick={() => navigate('/')}
-              title="Back to Home"
-              style={{ 
-                background: 'linear-gradient(135deg, var(--color-aqua-teal), var(--color-mint))',
-                color: 'white', 
-                border: 'none', 
-                padding: '0.6rem 0.6rem',
-                borderRadius: '50%', 
-                cursor: 'pointer', 
-                fontSize: '1.3rem',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                width: '2.5rem',
-                height: '2.5rem',
-                transition: 'all 0.3s ease',
-                boxShadow: '0 2px 8px rgba(115, 199, 199, 0.3)',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.transform = 'scale(1.1) rotate(-5deg)';
-                e.currentTarget.style.boxShadow = '0 4px 16px rgba(115, 199, 199, 0.5)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.transform = 'scale(1) rotate(0deg)';
-                e.currentTarget.style.boxShadow = '0 2px 8px rgba(115, 199, 199, 0.3)';
-              }}
-            >
-              <i className="uil uil-arrow-left"></i>
-            </button>
-            <button className="new-message-btn">
-              <i className="uil uil-edit"></i>
-            </button>
-          </div>
-        </div>
-
-        {/* Search Bar */}
-        <div className="messages-search-bar">
-          <i className="uil uil-search"></i>
-          <input
-            type="search"
-            placeholder="Search messages"
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
-        </div>
-
-        {/* Message Categories */}
-        <div className="messages-category">
-          <h6
-            className={activeCategory === 'primary' ? 'active' : ''}
-            onClick={() => handleCategoryChange('primary')}
-          >
-            Primary
-          </h6>
-          <h6
-            className={activeCategory === 'general' ? 'active' : ''}
-            onClick={() => handleCategoryChange('general')}
-          >
-            General
-          </h6>
-          <h6
-            className={`message-requests ${activeCategory === 'requests' ? 'active' : ''}`}
-            onClick={() => handleCategoryChange('requests')}
-          >
-            Requests ({messagesData.requests.length})
-          </h6>
-          <h6
-            className={activeCategory === 'archived' ? 'active' : ''}
-            onClick={() => handleCategoryChange('archived')}
-          >
-            Archived ({archivedChats.length})
-          </h6>
-        </div>
-
-        {/* Messages List */}
-        <div className="messages-list">
-          {filteredMessages.map((message) => (
-            <div
-              key={message.id}
-              className={`message-item ${activeChat?.id === message.id ? 'active' : ''}`}
-              onClick={() => openChat(message)}
-            >
-              <div className="profile-photo">
-                <img src={message.avatar} alt={message.name} />
-                {message.isOnline && <div className="active-indicator"></div>}
-              </div>
-              <div className="message-body">
-                <div className="message-header">
-                  <h5>{message.name}</h5>
-                  <span className="message-time">{message.time}</span>
-                </div>
-                <p className="text-muted">{message.lastMessage}</p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* Right Side - Chat Window */}
+      {/* Left Side - Chat Window */}
       <div className="chat-window">
         {/* Floating Emojis */}
         <div className="floating-emojis">
@@ -450,18 +345,110 @@ function Messages() {
           </div>
         )}
       </div>
-      <div className="return-feed-bar">
-        <button
-          type="button"
-          className="return-feed-icon"
-          onClick={handleReturnToFeed}
-          aria-label="Return to feed"
-          title="Return to Feed"
-        >
-          <span className="return-feed-icon-inner">
-            <i className="uil uil-home"></i>
-          </span>
-        </button>
+
+      {/* Right Sidebar - Conversations List */}
+      <div className="messages-sidebar">
+        <div className="messages-header">
+          <h2>Messages</h2>
+          <div style={{ display: 'flex', gap: '0.8rem', alignItems: 'center' }}>
+            <button 
+              className="home-icon-btn" 
+              onClick={() => navigate('/')}
+              title="Back to Home"
+              style={{ 
+                background: 'linear-gradient(135deg, var(--color-aqua-teal), var(--color-mint))',
+                color: 'white', 
+                border: 'none', 
+                padding: '0.6rem 0.6rem',
+                borderRadius: '50%', 
+                cursor: 'pointer', 
+                fontSize: '1.3rem',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                width: '2.5rem',
+                height: '2.5rem',
+                transition: 'all 0.3s ease',
+                boxShadow: '0 2px 8px rgba(115, 199, 199, 0.3)',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'scale(1.1) rotate(-5deg)';
+                e.currentTarget.style.boxShadow = '0 4px 16px rgba(115, 199, 199, 0.5)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'scale(1) rotate(0deg)';
+                e.currentTarget.style.boxShadow = '0 2px 8px rgba(115, 199, 199, 0.3)';
+              }}
+            >
+              <i className="uil uil-arrow-left"></i>
+            </button>
+            <button className="new-message-btn">
+              <i className="uil uil-edit"></i>
+            </button>
+          </div>
+        </div>
+
+        {/* Search Bar */}
+        <div className="messages-search-bar">
+          <i className="uil uil-search"></i>
+          <input
+            type="search"
+            placeholder="Search messages"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+          />
+        </div>
+
+        {/* Message Categories */}
+        <div className="messages-category">
+          <h6
+            className={activeCategory === 'primary' ? 'active' : ''}
+            onClick={() => handleCategoryChange('primary')}
+          >
+            Primary
+          </h6>
+          <h6
+            className={activeCategory === 'general' ? 'active' : ''}
+            onClick={() => handleCategoryChange('general')}
+          >
+            General
+          </h6>
+          <h6
+            className={`message-requests ${activeCategory === 'requests' ? 'active' : ''}`}
+            onClick={() => handleCategoryChange('requests')}
+          >
+            Requests ({messagesData.requests.length})
+          </h6>
+          <h6
+            className={activeCategory === 'archived' ? 'active' : ''}
+            onClick={() => handleCategoryChange('archived')}
+          >
+            Archived ({archivedChats.length})
+          </h6>
+        </div>
+
+        {/* Messages List */}
+        <div className="messages-list">
+          {filteredMessages.map((message) => (
+            <div
+              key={message.id}
+              className={`message-item ${activeChat?.id === message.id ? 'active' : ''}`}
+              onClick={() => openChat(message)}
+            >
+              <div className="profile-photo">
+                <img src={message.avatar} alt={message.name} />
+                {message.isOnline && <div className="active-indicator"></div>}
+              </div>
+              <div className="message-body">
+                <div className="message-header">
+                  <h5>{message.name}</h5>
+                  <span className="message-time">{message.time}</span>
+                </div>
+                <p className="text-muted">{message.lastMessage}</p>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
