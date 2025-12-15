@@ -321,16 +321,18 @@ function Feed() {
 
           {/* Create Button + Profile Icon */}
           <div className="create-profile">
-                         <button className="btn btn-primary" onClick={() => setShowCreatePost(true)}>
+            <button className="btn btn-primary" onClick={() => setShowCreatePost(true)}>
               <i className="uil uil-plus-circle"></i> Create
-             </button>
+            </button>
 
-            <div className="profile-photo">
-              <label htmlFor="profile-upload">
-                <i className="uil uil-user"></i>
-              </label>
-              <input type="file" id="profile-upload" hidden />
-            </div>
+            <button
+              type="button"
+              className="profile-photo profile-nav-button"
+              onClick={() => navigate('/profile')}
+              title="Go to your profile"
+            >
+              <i className="uil uil-user"></i>
+            </button>
           </div>
         </div>
       </nav>
@@ -357,7 +359,11 @@ function Feed() {
                 <span><i className="uil uil-home"></i></span>
                 <h3>Home</h3>
               </a>
-              <a className="menu-item">
+              <a
+                className="menu-item"
+                onClick={() => navigate('/explore')}
+                style={{ cursor: 'pointer' }}
+              >
                 <span><i className="uil uil-compass"></i></span>
                 <h3>Explore</h3>
               </a>

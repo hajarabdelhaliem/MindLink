@@ -1,9 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import './Explore/styles.css';
 import './feed/styles.css';
+import './messages/styles.css';
+import './Profile/styles.css';
 import Feed from './feed/Feed';
 import Messages from './messages/Messages';
+import Explore from './Explore/Explore';
+import Profile from './Profile/Profile';
 import reportWebVitals from './reportWebVitals';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -13,6 +18,8 @@ root.render(
       <Routes>
         <Route path="/" element={<Feed />} />
         <Route path="/messages" element={<Messages />} />
+        <Route path="/explore" element={<Explore />} />
+        <Route path="/profile" element={<Profile />} />
       </Routes>
     </Router>
   </React.StrictMode>
